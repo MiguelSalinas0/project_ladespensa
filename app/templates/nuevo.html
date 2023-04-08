@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+{% block titulo %} Nuevo Producto {% endblock %}
+
+{% block body %}
+
+<div class="container pt-5">
+    <form action="guardar" method="post">
+        <div class="mb-3 row">
+            <div class="form-group col-md-4">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Código</span>
+                    <input type="text" name="codigo" id="codigo" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-group col-md-4">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span>
+                    <input type="text" name="nombre" id="nombre" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-group col-md-4">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Stock</span>
+                    <input type="number" name="stock" id="stock" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <div class="form-group col-md-6">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Categoría</span>
+                    <select class="form-select" aria-label="Default select example" name="categoria" id="categoria" required>
+                        <option selected value="">Seleccionar una opción</option>
+                        <option value="Alimentos">Alimentos</option>
+                        <option value="Bebidas">Bebidas</option>
+                        <option value="Pastas">Pastas</option>
+                        <option value="Limpieza">Limpieza</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Precio</span>
+                    <input type="text" name="precio" id="precio" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <div class="form-group col-md-12">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Detalle</span>
+                    <input type="text" name="detalle" id="detalle" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

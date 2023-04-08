@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+{% block titulo %} Productos {% endblock %}
+
+{% block body %}
+
+<div class="pt-4 pb-5 container-fluid">
+    <table id="tab2" class="table table-light table-striped">
+        <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Nombre</th>
+                <th>Stock</th>
+                <th>Detalle</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td>{{producto.codigo}}</td>
+                <td>{{producto.nombre}}</td>
+                <td>{{producto.stock}}</td>
+                <td>{{producto.detalle}}</td>
+                <td>{{producto.categoria}}</td>
+                <td>$ {{producto.precio}}</td>
+                <td>
+                    <form action="detalle" method="post">
+                        <input type="hidden" name="id" id="id" value="{{producto.id}}">
+                        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="myModal">
+                            Editar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if session['bandera'] == True %}
+
+<div class="parentDisable"></div>
+<div class="divElement">
+    <form action="editar" method="post">
+        <div class="mb-3 row">
+            <div class="form-group col-md-4">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Código</span>
+                    <input type="text" name="codigo" id="codigo" class="form-control" value="{{producto.codigo}}">
+                </div>
+            </div>
+            <div class="form-group col-md-4">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span>
+                    <input type="text" name="nombre" id="nombre" class="form-control" value="{{producto.nombre}}">
+                </div>
+            </div>
+            <div class="form-group col-md-4">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Stock</span>
+                    <input type="number" name="stock" id="stock" class="form-control" value="{{producto.stock}}">
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <div class="form-group col-md-6">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Categoría</span>
+                    <select class="form-select" aria-label="Default select example" name="categoria" id="categoria">
+                        <option value="Alimentos" {% if producto.categoria == 'Alimentos' %} selected {% endif %}>Alimentos</option>
+                        <option value="Bebidas" {% if producto.categoria == 'Bebidas' %} selected {% endif %}>Bebidas</option>
+                        <option value="Pastas" {% if producto.categoria == 'Pastas' %} selected {% endif %}>Pastas</option>
+                        <option value="Limpieza" {% if producto.categoria == 'Limpieza' %} selected {% endif %}>Limpieza</option>
+                    </select>                
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Precio</span>
+                    <input type="text" name="precio" id="precio" class="form-control" value="{{producto.precio}}">
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <div class="form-group col-md-12">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Detalle</span>
+                    <input type="text" name="detalle" id="detalle" class="form-control" value="{{producto.detalle}}">
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <div>
+                <button name="submit" type="submit" class="btn btn-danger" value="cancelar">Cancelar</button>
+                <button name="submit" type="submit" class="btn btn-success" value="guardar">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endif %}
+
+{% endblock %}

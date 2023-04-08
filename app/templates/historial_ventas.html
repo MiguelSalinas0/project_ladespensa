@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block titulo %} Historial {% endblock %}
+
+{% block body %}
+
+<div class="pt-4 pb-5 container-fluid">
+    <table id="tab2" class="table table-light table-striped">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venta in ventas %}
+            <tr>
+                <td>{{venta.fecha}}</td>
+                <td>$ {{venta.total}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
