@@ -4,8 +4,7 @@ from api.api_producto import *
 from api.api_venta import *
 
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
-
+app.secret_key = "ffgghhllmm"
 
 
 @app.route('/inicio')
@@ -99,7 +98,6 @@ def guardar():
 
 @app.route('/venta')
 def venta():
-    session['items'] = []
     return render_template('venta.html', items=session.get('items'))
 
 
@@ -112,7 +110,7 @@ def agregar_item():
         prod, error = get_prod_cod(request.form['codigo'])
         if error == None:
             if cant > int(prod.get('stock')) or prod.get('stock') == 0:
-                flash("Imposible agregar, no hay stock suficiente", category="error")
+                flash(f"Imposible agregar, no hay stock suficiente. Stock actual: {prod.get('stock')}", category="error")
                 return redirect(url_for("venta"))
             else:
                 item['id'] = prod.get('id')
@@ -156,16 +154,16 @@ def eliminar_item():
 
 @app.route('/generarVenta', methods=['POST'])
 def generarVenta():
-    totalVenta = 0
+    totalVenta = 0.0
+    venta = {}
     for item in session.get('items'):
-        prod, error = get_prod_cod(item['codigo'])
-        if error == None:
-            error = update_stock(item['id'], item['cantidad'])
-            if error == None:
-                print('ae actualizo el stcok')
-
-
-
+        error = update_stock(item['codigo'], item['cantidad'])
+        totalVenta = totalVenta + item['total']
+    venta['fecha'] = datetime.now()
+    venta['total'] = totalVenta
+    error = insert_vent(venta)
+    if error == None:
+        flash('La venta se realizó exitosamente', category='success')
     return redirect(url_for("inicio"))
 
 
@@ -174,6 +172,11 @@ def historial_ventas():
     ventas, error = get_all_ven()
     if error == None:
         return render_template('historial_ventas.html', ventas=ventas)
+    
+
+@app.route('/informes')
+def informes():
+    return render_template('informes.html')
 
 
 def pagina_no_encontrada(error):

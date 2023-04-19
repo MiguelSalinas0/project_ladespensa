@@ -78,3 +78,25 @@
     padding: 25px;
     width: 80%;
 }
+
+
+/* INPUT DATE */
+
+
+input[type="date"] {
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: #333;
+}
+
+input[type="date"]:focus {
+    border-bottom: 2px solid #333;
+}

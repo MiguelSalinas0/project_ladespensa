@@ -10,7 +10,8 @@ def get_prod_cod(prod_cod):
         prod = {}
         return prod, error
     else:
-        prod = dict(zip(('id', 'codigo', 'nombre', 'stock', 'detalle', 'categoria', 'precio'), prod))
+        prod = dict(zip(('id', 'codigo', 'nombre', 'stock',
+                    'detalle', 'categoria', 'precio'), prod))
     con.commit()
     return prod, error
 
@@ -24,7 +25,8 @@ def get_prod_id(prod_id):
         prod = {}
         return prod, error
     else:
-        prod = dict(zip(('id', 'codigo', 'nombre', 'stock', 'detalle', 'categoria', 'precio'), prod))
+        prod = dict(zip(('id', 'codigo', 'nombre', 'stock',
+                    'detalle', 'categoria', 'precio'), prod))
     con.commit()
     return prod, error
 
@@ -36,7 +38,8 @@ def get_all_prod():
     productos = cur.fetchall()
     prods = []
     for row in productos:
-        prod = dict(zip(('id', 'codigo', 'nombre', 'stock', 'detalle', 'categoria', 'precio'), row))
+        prod = dict(zip(('id', 'codigo', 'nombre', 'stock',
+                    'detalle', 'categoria', 'precio'), row))
         prods.append(prod)
     return prods, error
 
@@ -80,16 +83,16 @@ def update_prod(prod_info: dict):
     return error
 
 
-def update_stock(id, cant):
+def update_stock(cod, cant: int):
     error = None
     con, cur = get_db()
-    prod, error = get_prod_id(id)
-    if error == None:
-        nuevoStock = prod.get('stock') - cant
-        try:
-            cur.execute('UPDATE producto SET stock = ? WHERE id = ?', (nuevoStock, id,))
-        except Exception as E:
-            con.rollback()
-            print(f"Unexpected {E=}, {type(E)=}")
-            error = {'error': 'Error actualizando el stock: ' + str(E)}
-        return error
+    prod, error = get_prod_cod(cod)
+    nuevoStock = int(prod.get('stock')) - cant
+    try:
+        cur.execute('UPDATE producto SET stock = ? WHERE codigo = ?',
+                    (nuevoStock, prod.get('codigo'),))
+        con.commit()
+    except Exception as E:
+        con.rollback()
+        print(f"Unexpected {E=}, {type(E)=}")
+    return error

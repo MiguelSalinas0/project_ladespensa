@@ -26,3 +26,6 @@ def insert_vent(vent_info: dict):
         print(f"Unexpected {E=}, {type(E)=}")
         error = {'error': 'Error grabando venta: ' + str(E)}
     return error
+
+
+#SELECT * FROM venta WHERE fecha BETWEEN '2023-04-17 00:00:00' AND '2023-04-20 23:59:59'
