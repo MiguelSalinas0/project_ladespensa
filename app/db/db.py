@@ -3,7 +3,7 @@ from flask import Flask, g
 
 app = Flask(__name__)
 
-DATABASE = 'C:/Users/w10-21h2/Desktop/project_ladespensa/instance/ladespensa.db'
+DATABASE = 'C:/Users/Usuario/Documents/Proyectos/project_ladespensa/instance/ladespensa.db'
 
 
 def get_db():

@@ -110,7 +110,8 @@ def agregar_item():
         prod, error = get_prod_cod(request.form['codigo'])
         if error == None:
             if cant > int(prod.get('stock')) or prod.get('stock') == 0:
-                flash(f"Imposible agregar, no hay stock suficiente. Stock actual: {prod.get('stock')}", category="error")
+                flash(
+                    f"Imposible agregar, no hay stock suficiente. Stock actual: {prod.get('stock')}", category="error")
                 return redirect(url_for("venta"))
             else:
                 item['id'] = prod.get('id')
@@ -167,16 +168,44 @@ def generarVenta():
     return redirect(url_for("inicio"))
 
 
-@app.route('/historial_ventas')
-def historial_ventas():
-    ventas, error = get_all_ven()
-    if error == None:
-        return render_template('historial_ventas.html', ventas=ventas)
-    
-
 @app.route('/informes')
 def informes():
     return render_template('informes.html')
+
+
+@app.route('/select_informe', methods=['POST'])
+def select_informe():
+    if request.method == 'POST':
+        return render_template('informes.html', op=request.form['infoSel'])
+
+
+@app.route('/get_informes', methods=['POST'])
+def get_informes():
+    if request.method == 'POST':
+        op = request.form['option']
+        if op == '1':
+            f1 = request.form['myDate1'] + ' 00:00:00'
+            f2 = request.form['myDate2'] + ' 23:59:59'
+            ventas, error = get_rango(f1, f2)
+            if error == None:
+                return render_template('informes.html', op=op, ventas=ventas, f1=request.form['myDate1'], f2=request.form['myDate2'])
+        if op == '2':
+            totalDia = 0.0
+            f1 = request.form['myDate1'] + ' 00:00:00'
+            f2 = request.form['myDate1'] + ' 23:59:59'
+            ventas, error = get_rango(f1, f2)
+            if error == None:
+                for item in ventas:
+                    totalDia = totalDia + item['total']
+                return render_template('informes.html', op=op, ventas=ventas, f1=request.form['myDate1'], totalDia=totalDia)
+        if op == '3':
+            totalMes = 0.0
+            mes = request.form['myDate1']
+            ventas, error = get_mes(mes)
+            if error == None:
+                for item in ventas:
+                    totalMes = totalMes + item['total']
+                return render_template('informes.html', op=op, ventas=ventas, f1=request.form['myDate1'], totalMes=totalMes)
 
 
 def pagina_no_encontrada(error):

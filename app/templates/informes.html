@@ -3,30 +3,168 @@
 
 {% block body %}
 
-<div class="container pt-5">
-    <form action="" method="post">
-        <div class="mb-3 row justify-content-center">
-            <div class="form-group col-md-4">
-                <div class="input-group mb-3 d-flex justify-content-end">
-                    <label for="myDate1">Fecha desde:</label>
-                    <input type="date" id="myDate1" name="myDate1">
-                </div>
-            </div>
-            <div class="form-group col-md-4">
-                <div class="input-group mb-3 d-flex justify-content-end">
-                    <label for="myDate2">Fecha Hasta:</label>
-                    <input type="date" id="myDate2" name="myDate2">
-                </div>
-            </div>
-            <div class="form-group col-md-4">
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary">Consultar</button>
-                </div>
-            </div>
+<div class="container pt-4">
+    <form action="select_informe" method="post" class="d-flex justify-content-center justify-content-evenly">
+        <div class="form-group">
+            <select class="form-select" aria-label="Default select example" id="infoSel" name="infoSel">
+                <option>Seleccione el tipo de informe a consultar</option>
+                <option value="1" {% if op=='1' %} selected {% endif %}>Rango de fechas</option>
+                <option value="2" {% if op=='2' %} selected {% endif %}>Historial de un día</option>
+                <option value="3" {% if op=='3' %} selected {% endif %}>Historial de un mes</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Seleccionar</button>
         </div>
     </form>
 </div>
 
+{% if op == '1' %}
 
+<div>
+    <div class="container pt-5">
+        <form action="get_informes" method="post">
+            <input type="hidden" name="option" id="option" value="{{op}}">
+            <div class="mb-3 row justify-content-center">
+                <div class="form-group col-md-4">
+                    <div class="input-group mb-3 d-flex justify-content-end">
+                        <label for="myDate1">Fecha desde:</label>
+                        <input type="date" id="myDate1" name="myDate1" value="{{f1}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="input-group mb-3 d-flex justify-content-end">
+                        <label for="myDate2">Fecha Hasta:</label>
+                        <input type="date" id="myDate2" name="myDate2" value="{{f2}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="d-flex justify-content-center">
+                        <button name="submit" type="submit" class="btn btn-primary" value="form1">Consultar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="pb-5 container-fluid">
+        <table id="tab2" class="table table-light table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas %}
+                <tr>
+                    <td>{{venta.fecha}}</td>
+                    <td>$ {{venta.total}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endif %}
+
+{% if op == '2' %}
+
+<div>
+    <div class="container pt-5" id="rango">
+        <form action="get_informes" method="post">
+            <input type="hidden" name="option" id="option" value="{{op}}">
+            <div class="mb-3 row justify-content-center">
+                <div class="form-group col-md-4">
+                    <div class="input-group mb-3 d-flex justify-content-end">
+                        <label for="myDate1">Fecha:</label>
+                        <input type="date" id="myDate1" name="myDate1" value="{{f1}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="d-flex justify-content-center">
+                        <button name="submit" type="submit" class="btn btn-primary" value="form1">Consultar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="pb-5 container-fluid">
+        <table id="tab2" class="table table-light table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas %}
+                <tr>
+                    <td>{{venta.fecha}}</td>
+                    <td>$ {{venta.total}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Suma total del día: ${{totalDia}}</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+{% endif %}
+
+{% if op == '3' %}
+
+<div>
+    <div class="container pt-5" id="rango">
+        <form action="get_informes" method="post">
+            <input type="hidden" name="option" id="option" value="{{op}}">
+            <div class="mb-3 row justify-content-center">
+                <div class="form-group col-md-4">
+                    <div class="input-group mb-3 d-flex justify-content-end">
+                        <label for="myDate1">Mes:</label>
+                        <input type="month" id="myDate1" name="myDate1" value="{{f1}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="d-flex justify-content-center">
+                        <button name="submit" type="submit" class="btn btn-primary" value="form1">Consultar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="pb-5 container-fluid">
+        <table id="tab2" class="table table-light table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas %}
+                <tr>
+                    <td>{{venta.fecha}}</td>
+                    <td>$ {{venta.total}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Suma total del mes: ${{totalMes}}</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+{% endif %}
 
 {% endblock %}

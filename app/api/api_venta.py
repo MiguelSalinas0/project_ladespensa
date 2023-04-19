@@ -28,4 +28,26 @@ def insert_vent(vent_info: dict):
     return error
 
 
-#SELECT * FROM venta WHERE fecha BETWEEN '2023-04-17 00:00:00' AND '2023-04-20 23:59:59'
+def get_rango(fecha_inicial, fecha_final):
+    error = None
+    con, cur = get_db()
+    cur.execute('SELECT * FROM venta WHERE fecha BETWEEN ? and ?',
+                (fecha_inicial, fecha_final,))
+    ventas = cur.fetchall()
+    vents = []
+    for row in ventas:
+        prod = dict(zip(('id', 'fecha', 'total'), row))
+        vents.append(prod)
+    return vents, error
+
+
+def get_mes(mes):
+    error = None
+    con, cur = get_db()
+    cur.execute("SELECT * FROM venta WHERE strftime('%Y-%m', fecha) = ?", (mes,))
+    ventas = cur.fetchall()
+    vents = []
+    for row in ventas:
+        prod = dict(zip(('id', 'fecha', 'total'), row))
+        vents.append(prod)
+    return vents, error
