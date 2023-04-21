@@ -5,9 +5,9 @@
 
 <div class="login-page">
     <div class="form">
-        <form class="login-form">
-            <input type="text" placeholder="username" required />
-            <input type="password" placeholder="password" required />
+        <form class="login-form" method="POST" action="login">
+            <input type="text" placeholder="Usuario" name="usuario" required />
+            <input type="password" placeholder="Contraseña" name="clave" required />
             <div class="pt-4">
                 <button type="submit">Ingresar</button>
             </div>

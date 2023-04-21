@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import Flask, flash, request, render_template, session, redirect, url_for
 from api.api_producto import *
 from api.api_venta import *
+from api.api_user import *
 
 app = Flask(__name__)
 app.secret_key = "ffgghhllmm"
@@ -11,26 +12,52 @@ app.secret_key = "ffgghhllmm"
 def inicio():
     session['items'] = []
     session['bandera'] = False
-    return render_template('index.html')
+    return render_template("index.html")
 
 
 @app.route('/')
 def index():
-    session['bandera'] = False
-    return render_template('index.html')
+    if "id" in session:
+        return redirect(url_for("inicio"))
+    else:
+        return render_template('login.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    if request.method == 'POST':
+        if request.form['usuario'] and request.form['clave']:
+            usuario = request.form['usuario']
+            clave = request.form['clave']
+            datosUsr, error = usr_login(usuario, clave)
+            if error == None:
+                if "ID" in datosUsr:
+                    session["id"] = datosUsr["ID"]
+                    session["usr"] = datosUsr['NOMBRE']
+                    nomUsuario = datosUsr["NOMBRE"]
+                    flash(f"Inicio de sesión exitosa - { nomUsuario }", "info")
+                    return redirect(url_for("inicio"))
+                else:
+                    flash(f"Nombre de usuario y/o clave erroneos", "error")
+                    return redirect(url_for("login"))
+            else:
+                flash(f"Nombre de usuario y/o clave erroneos", "error")
+                return redirect(url_for("login"))
+        else:
+            return render_template('login.html')
+    else:
+        return render_template('login.html')
 
 
 @app.route('/lista_productos')
 def listado():
-    productos, error = get_all_prod()
-    if error == None:
-        session['bandera'] = False
-        return render_template('lista_productos.html', productos=productos)
+    if "id" in session:
+        productos, error = get_all_prod()
+        if error == None:
+            session['bandera'] = False
+            return render_template('lista_productos.html', productos=productos)
+    else:
+        return redirect(url_for("login"))
 
 
 @app.route('/detalle', methods=['POST'])
@@ -73,7 +100,11 @@ def editar():
 
 @app.route('/nuevo')
 def nuevo():
-    return render_template('nuevo.html')
+    if session.get("usr") == 'admin':
+        return render_template('nuevo.html')
+    else:
+        flash('No tiene autorización', category='error')
+        return redirect(url_for("index"))
 
 
 @app.route('/guardar', methods=['POST'])
@@ -170,7 +201,11 @@ def generarVenta():
 
 @app.route('/informes')
 def informes():
-    return render_template('informes.html')
+    if session.get("usr") == 'admin':
+        return render_template('informes.html')
+    else:
+        flash('No tiene autorización', category='error')
+        return redirect(url_for("index"))
 
 
 @app.route('/select_informe', methods=['POST'])
@@ -206,6 +241,13 @@ def get_informes():
                 for item in ventas:
                     totalMes = totalMes + item['total']
                 return render_template('informes.html', op=op, ventas=ventas, f1=request.form['myDate1'], totalMes=totalMes)
+
+
+@app.route('/salir')
+def salir():
+    session['id'] = None
+    session['usr'] = None
+    return render_template("login.html")
 
 
 def pagina_no_encontrada(error):

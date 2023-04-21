@@ -13,7 +13,9 @@
                 <th>Detalle</th>
                 <th>Categoría</th>
                 <th>Precio</th>
+                {% if session["usr"] == 'admin' %}
                 <th>Acciones</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -25,6 +27,7 @@
                 <td>{{producto.detalle}}</td>
                 <td>{{producto.categoria}}</td>
                 <td>$ {{producto.precio}}</td>
+                {% if session["usr"] == 'admin' %}
                 <td>
                     <form action="detalle" method="post">
                         <input type="hidden" name="id" id="id" value="{{producto.id}}">
@@ -33,6 +36,7 @@
                         </button>
                     </form>
                 </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>
