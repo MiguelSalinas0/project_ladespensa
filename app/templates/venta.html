@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% block titulo %} Venta {% endblock %}
+{% block title %} Venta {% endblock %}
 
 {% block body %}
 
@@ -10,14 +10,14 @@
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Código</span>
                     <input type="text" name="codigo" id="codigo" class="form-control"
-                        placeholder="Ingrese el código del artículo" required>
+                        placeholder="Ingrese el código del artículo" required autocomplete="off">
                 </div>
             </div>
             <div class="form-group col-md-5">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Cantidad</span>
                     <input type="number" name="cantidad" id="cantidad" class="form-control"
-                        placeholder="Ingrese la cantidad" required>
+                        placeholder="Ingrese la cantidad" required autocomplete="off">
                 </div>
             </div>
             <div class="form-group col-md-2">
@@ -69,7 +69,7 @@
                 <td>Total venta: ${{totalVenta}}</td>
                 <td>
                     <form action="generarVenta" method="post">
-                        <button type="submit" class="btn btn-success">Generar Venta</button>
+                        <button type="submit" class="btn btn-success" {% if totalVenta == 0.0 %} disabled {% endif %}>Generar Venta</button>
                     </form>
                 </td>
             </tr>

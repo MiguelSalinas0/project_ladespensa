@@ -1,5 +1,4 @@
-from db.db import get_db
-
+from ..db.db import get_db
 
 def get_prod_cod(prod_cod):
     error = None
@@ -83,16 +82,47 @@ def update_prod(prod_info: dict):
     return error
 
 
-def update_stock(cod, cant: int):
+# def update_stock(cod, cant: int):
+#     error = None
+#     con, cur = get_db()
+#     prod, error = get_prod_cod(cod)
+#     nuevoStock = int(prod.get('stock')) - cant
+#     try:
+#         cur.execute('UPDATE producto SET stock = ? WHERE codigo = ?',
+#                     (nuevoStock, prod.get('codigo'),))
+#         con.commit()
+#     except Exception as E:
+#         con.rollback()
+#         print(f"Unexpected {E=}, {type(E)=}")
+#         error = {'Error actualizando el producto: ' + str(E)}
+#     return error
+
+
+def update_stock(cod: int, cant: int):
+    con, cur = None, None
     error = None
-    con, cur = get_db()
-    prod, error = get_prod_cod(cod)
-    nuevoStock = int(prod.get('stock')) - cant
     try:
+        con, cur = get_db()
+        prod, prod_error = get_prod_cod(cod)
+        
+        if prod_error:
+            return prod_error
+
+        nuevoStock = int(prod.get('stock', 0)) - cant
+        
+        if nuevoStock < 0:
+            return {'Error: Stock insuficiente para el producto.'}
+        
         cur.execute('UPDATE producto SET stock = ? WHERE codigo = ?',
-                    (nuevoStock, prod.get('codigo'),))
+                    (nuevoStock, cod))
         con.commit()
-    except Exception as E:
-        con.rollback()
-        print(f"Unexpected {E=}, {type(E)=}")
+    except Exception as e:
+        if con:
+            con.rollback()
+        error = f"Error actualizando el producto: {str(e)}"
+    # finally:
+    #     if cur:
+    #         cur.close()
+    #     if con:
+    #         con.close()
     return error

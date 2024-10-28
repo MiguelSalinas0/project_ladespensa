@@ -1,21 +1,30 @@
 import sqlite3
-from flask import Flask, g
+from flask import g
 
-app = Flask(__name__)
+DATABASE = 'D:/Proyectos/La Despensa/project_ladespensa/app/instance/ladespensa.db'
 
-DATABASE = 'C:/Users/Usuario/Documents/Proyectos/project_ladespensa/instance/ladespensa.db'
+
+# def get_db():
+#     db = getattr(g, '_database', None)
+#     if db is None:
+#         db = g._database = sqlite3.connect(DATABASE)
+#     cursor = db.cursor()
+#     return db, cursor
 
 
 def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
-    cursor = db.cursor()
-    return db, cursor
+    if 'db' not in g:
+        g.db = sqlite3.connect(DATABASE)
+    return g.db, g.db.cursor()
 
 
-@app.teardown_appcontext
+
+# def close_connection(exception):
+#     db = getattr(g, '_database', None)
+#     if db is not None:
+#         db.close()
+
 def close_connection(exception):
-    db = getattr(g, '_database', None)
+    db = g.pop('db', None)
     if db is not None:
         db.close()

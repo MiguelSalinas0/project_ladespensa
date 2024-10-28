@@ -24,7 +24,7 @@
   {% if request.path != '/login' and request.path != '/' and request.path != '/salir' %}
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{{url_for('inicio')}}">Inicio</a>
+      <a class="navbar-brand" href="{{url_for('bp.inicio')}}">Inicio</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -32,21 +32,21 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('venta')}}">Venta</a>
+            <a class="nav-link" href="{{url_for('bp.venta')}}">Venta</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('listado')}}">Productos</a>
+            <a class="nav-link" href="{{url_for('bp.listado')}}">Productos</a>
           </li>
           {% if session["usr"] == 'admin' %}
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('nuevo')}}">Nuevo Producto</a>
+            <a class="nav-link" href="{{url_for('bp.nuevo')}}">Nuevo Producto</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('informes')}}">Informes</a>
+            <a class="nav-link" href="{{url_for('bp.informes')}}">Informes</a>
           </li>
           {% endif %}
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('salir')}}">Salir</a>
+            <a class="nav-link" href="{{url_for('bp.salir')}}">Salir</a>
           </li>
         </ul>
       </div>

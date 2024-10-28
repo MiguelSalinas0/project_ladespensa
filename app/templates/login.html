@@ -1,13 +1,13 @@
 {% extends 'layout.html' %}
-{% block titulo %} Login {% endblock %}
+{% block title %} Login {% endblock %}
 
 {% block body %}
 
 <div class="login-page">
     <div class="form">
         <form class="login-form" method="POST" action="login">
-            <input type="text" placeholder="Usuario" name="usuario" required />
-            <input type="password" placeholder="Contraseña" name="clave" required />
+            <input type="text" placeholder="Usuario" name="usuario" required autocomplete="off"/>
+            <input type="password" placeholder="Contraseña" name="clave" required autocomplete="off"/>
             <div class="pt-4">
                 <button type="submit">Ingresar</button>
             </div>
